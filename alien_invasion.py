@@ -80,6 +80,8 @@ class AlienInvasion:
                 # only works if button is clicked and game isn't active
             self.stats.reset_stats()
             self.stats.game_active = True
+            # prep scoreboard with zero for new game
+            self.sb.prep_score()
 
             # Get rid of any remaining aliens and bullets.
             self.aliens.empty()
@@ -137,6 +139,14 @@ class AlienInvasion:
         # If so, get rid of the bullet and the alien.
         # The true arguments tell PyGame to delete the bullets and aliens that have collided
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+
+        # update score when alien is shot
+        if collisions:
+            for aliens in collisions.values():
+                # make sure to score all hits -- count all aliens hit
+                self.stats.score += self.settings.alien_points * len(aliens)
+            # create new image
+            self.sb.prep_score()
 
         # Check if aliens group is empty (False)
         if not self.aliens:
