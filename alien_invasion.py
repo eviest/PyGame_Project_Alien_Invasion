@@ -85,21 +85,30 @@ class AlienInvasion:
         # Create an alien and find the number of aliens in a row.
         # Spacing between each alien is equal to one alien width.
         alien = Alien(self)
-        alien_width = alien.rect.width
+        # Size attribute contains w and h of rect obj
+        alien_width, alien_height = alien.rect.size
+        # figure out space needed by dividing available space by width of an alien (alien plus space next to it)
+        # floor division (//) divides 2 numbers and drops any remainder
         available_space_x = self.settings.screen_width - (2 * alien_width)
         number_aliens_x = available_space_x // (2 * alien_width)
-        # floor division (//) divides 2 numbers and drops any remainder
-        # figure out space needed by dividing available space by width of an alien (alien plus space next to it)
+        
+        # Determine the number of rows of aliens that fit on the screen.
+        ship_height = self.ship.rect.height
+        available_space_y = (self.settings.screen_height - 
+                                (3 * alien_height) - ship_height)
+        number_rows = available_space_y // (2 * alien_height)
 
-        # Create the first row of aliens.
-        for alien_number in range(number_aliens_x):
-            self._create_alien(alien_number)
+        # Create the full fleet of aliens.
+        for row_number in range(number_rows):
+            for alien_number in range(number_aliens_x):
+                # Create aliens in one row
+                self._create_alien(alien_number, row_number)
     
-    def _create_alien(self, alien_number):
+    def _create_alien(self, alien_number, row_number):
             """Create an alien and place it in the row."""
             alien = Alien(self)
             # Width inside method to make it easier to add new rows and create an entire fleet
-            alien_width = alien.rect.width
+            alien_width, alien_height = alien.rect.size
             # Create a new alien and set its x value
             # Each alien is pushed to the right one alien width from the left margin
             # Multiply alien width * 2 to account for space ea alien takes up
@@ -107,6 +116,9 @@ class AlienInvasion:
             alien.x = alien_width + 2 * alien_width * alien_number
             # Alien's x attribute is used to set position of rect
             alien.rect.x = alien.x
+            # Set the y value by adding alien height (empty space at top of screen) with 2 alien heights below previous row
+                # (alien height times two then multiply by row number)
+            alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
             # Add it to the alien group
             self.aliens.add(alien)
 
