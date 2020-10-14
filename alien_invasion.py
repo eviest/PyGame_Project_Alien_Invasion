@@ -34,10 +34,15 @@ class AlienInvasion:
     def run_game(self):
         """Start the main loop for the game."""
         while True:
+            # We always need to call check events even if game is inactive (ex: user presses "Q")
             self._check_events()
-            self.ship.update()
-            self._update_bullets()
-            self._update_aliens()
+
+            # Parts that run when game is active
+            if self.stats.game_active:
+                self.ship.update()
+                self._update_bullets()
+                self._update_aliens()
+            
             self._update_screen()
                 
     def _check_events(self):
