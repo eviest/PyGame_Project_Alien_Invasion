@@ -93,8 +93,13 @@ class AlienInvasion:
 
         # Create the first row of aliens.
         for alien_number in range(number_aliens_x):
-            # Create an alien and place it in the row.
+            self._create_alien(alien_number)
+    
+    def _create_alien(self, alien_number):
+            """Create an alien and place it in the row."""
             alien = Alien(self)
+            # Width inside method to make it easier to add new rows and create an entire fleet
+            alien_width = alien.rect.width
             # Create a new alien and set its x value
             # Each alien is pushed to the right one alien width from the left margin
             # Multiply alien width * 2 to account for space ea alien takes up
