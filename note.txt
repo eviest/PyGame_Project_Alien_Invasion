@@ -1,0 +1,2 @@
+I forgot to commit changes from the beginning of the project to the end of "Moving Both Left and Right". 
+I am going to commit changes from what I have now (everything up to that section) and every section going forward.
