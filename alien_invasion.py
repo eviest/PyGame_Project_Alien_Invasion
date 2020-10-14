@@ -1,7 +1,10 @@
 import sys
+# Import sleep() fn so we can pause the game for a moment when a ship is hit
+from time import sleep
 import pygame
 
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -16,8 +19,10 @@ class AlienInvasion:
 
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
-                     
         pygame.display.set_caption("Alien Invasion")
+
+        # Create an instance to store game statistics.
+        self.stats = GameStats(self)
 
         self.ship = Ship(self)
         # Create a group to store live bullets
@@ -111,7 +116,25 @@ class AlienInvasion:
         # spritecollideany loops thru aliens group and returns first alien that collided w/the ship
             # If no collisions occur, spritecollideany() returns None and if block won't execute
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
-            print("Ship hit!!!")
+            self._ship_hit()
+
+    # Create a new method
+    def _ship_hit(self):
+        """Respond to the ship being hit by an alien."""
+        # Decrement ships_left.
+        self.stats.ships_left -= 1
+
+        # Get rid of any remaining aliens and bullets.
+        self.aliens.empty()
+        self.bullets.empty()
+
+        # Create a new fleet and center the ship.
+        self._create_fleet()
+        self.ship.center_ship()
+
+        # Pause. so player can see that they've been hit
+        sleep(0.5)
+        # code moves on to _update_screen() method which draws a new fleet to the screen
         
     def _create_fleet(self):
         """Create the fleet of aliens"""
