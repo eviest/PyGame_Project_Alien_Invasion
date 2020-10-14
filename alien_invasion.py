@@ -35,8 +35,7 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
-            # Update position of bullets on each pass thru loop (updates each bullet in group)
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
 
                 
@@ -72,8 +71,21 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Create a new bullet (instance) and add it to the bullets group (add is similar to append() but used for PyGame groups)."""
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
+
+    def _update_bullets(self):
+        """Update position of bullets and get rid of old bullets."""
+        # Update position of bullets on each pass thru loop (updates each bullet in group)
+        self.bullets.update()
+
+        # Get rid of bullets that have disappeared. Loop over a copy of the group to remove items bc can't remove items within for loop
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+        #print(len(self.bullets))
+
     
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
