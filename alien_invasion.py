@@ -23,6 +23,8 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
 
         self.ship = Ship(self)
+        # Create a group to store live bullets
+        self.bullets = pygame.sprite.Group()
 
         # Set the background color.
         #self.bg_color = (230, 230, 230)
@@ -32,6 +34,8 @@ class AlienInvasion:
         while True:
             self._check_events()
             self.ship.update()
+            # Update position of bullets on each pass thru loop (updates each bullet in group)
+            self.bullets.update()
             self._update_screen()
 
                 
