@@ -109,7 +109,7 @@ class AlienInvasion:
             then update the positions of all aliens in the fleet.
         """
         self._check_fleet_edges()
-        # use update method in aliens group to call each alien's update method
+        # use update method in aliens group to call each alien's update method (update positions of aliens)
         self.aliens.update()
 
         # Look for alien-ship collisions.
@@ -117,6 +117,9 @@ class AlienInvasion:
             # If no collisions occur, spritecollideany() returns None and if block won't execute
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self._ship_hit()
+        
+        # Look for aliens hitting the bottom of the screen.
+        self._check_aliens_bottom()
 
     # Create a new method
     def _ship_hit(self):
@@ -135,6 +138,15 @@ class AlienInvasion:
         # Pause. so player can see that they've been hit
         sleep(0.5)
         # code moves on to _update_screen() method which draws a new fleet to the screen
+    
+    def _check_aliens_bottom(self):
+        """Check if any aliens have reached the bottom of the screen."""
+        screen_rect = self.screen.get_rect()
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom >= screen_rect.bottom:
+                # Treat this the same as if the ship got hit.
+                self._ship_hit()
+                break
         
     def _create_fleet(self):
         """Create the fleet of aliens"""
