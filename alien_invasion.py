@@ -15,20 +15,12 @@ class AlienInvasion:
 
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
-        
-        # full screen mode:
-        #self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        #self.settings.screen_width = self.screen.get_rect().width
-        #self.settings.screen_height = self.screen.get_rect().height
-                
+                     
         pygame.display.set_caption("Alien Invasion")
 
         self.ship = Ship(self)
         # Create a group to store live bullets
         self.bullets = pygame.sprite.Group()
-
-        # Set the background color.
-        #self.bg_color = (230, 230, 230)
     
     def run_game(self):
         """Start the main loop for the game."""
@@ -37,7 +29,6 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullets()
             self._update_screen()
-
                 
     def _check_events(self):
         """Respond to keypresses and mouse events."""
@@ -84,8 +75,7 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-        #print(len(self.bullets))
-
+        
     
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
